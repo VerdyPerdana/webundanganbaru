@@ -114,7 +114,7 @@
     </button>
     
     <!-- Audio Element -->
-    <audio id="bgMusic" loop src="The Way You Look At Me Nyoman Paul.mp3"></audio>
+    <audio id="bgMusic" loop src="HEAVEN  DIMAS SENOPATI.mp3"></audio>
 
     <!-- ========================================== -->
     <!-- HALAMAN COVER / SAMPUL -->
@@ -137,7 +137,7 @@
             
             <!-- Tempat untuk Nama Tamu dari URL -->
             <p class="text-stone-500 mb-2 tracking-widest italic font-medium text-sm">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
-            <h3 id="guestNameDisplay" class="text-2xl md:text-3xl font-serif font-bold text-brand-400 mb-10 capitalize min-h-[2.5rem]"></h3>
+            <h3 id="guestNameDisplay" class="text-2xl md:text-3xl font-serif font-bold text-brand-400 mb-10 capitalize min-h-[2.5rem]">Tamu Undangan</h3>
             
             <button onclick="openInvitation()" class="group relative inline-flex items-center justify-center px-12 py-4 font-bold text-white transition-all bg-brand-900 rounded-full hover:bg-brand-800 shadow-xl hover:shadow-brand-300/50 hover:-translate-y-1 active:scale-95 tracking-widest uppercase text-sm border-2 border-brand-900">
                 Buka Undangan
@@ -228,7 +228,7 @@
                             <div class="absolute inset-0 bg-brand-200 rounded-t-full rounded-b-[2rem] translate-x-4 translate-y-4"></div>
                             <!-- Foto murni -->
                             <div class="absolute inset-0 rounded-t-full rounded-b-[2rem] border-[8px] border-white shadow-2xl overflow-hidden bg-stone-200">
-                                <img src="foto.jpeg" alt="Samsurizal" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
+                                <img src="foto1 (6).jpg" alt="Samsurizal" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
                             </div>
                         </div>
                         <h3 class="text-3xl md:text-4xl font-serif font-extrabold text-brand-900 mb-1 uppercase tracking-wide">SAMSURIZAL</h3>
@@ -243,7 +243,7 @@
                         <div class="relative w-64 h-80 md:w-72 md:h-96 mx-auto mb-10">
                             <div class="absolute inset-0 bg-brand-200 rounded-t-full rounded-b-[2rem] -translate-x-4 translate-y-4"></div>
                             <div class="absolute inset-0 rounded-t-full rounded-b-[2rem] border-[8px] border-white shadow-2xl overflow-hidden bg-stone-200">
-                                <img src="foto1.jpeg" alt="Defi Permatasari" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
+                                <img src="URS07994.jpg" alt="Defi Permatasari" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000">
                             </div>
                         </div>
                         <h3 class="text-3xl md:text-4xl font-serif font-extrabold text-brand-900 mb-1 uppercase tracking-wide">DEFI PERMATASARI, S.Pd.,Gr</h3>
@@ -503,14 +503,32 @@
                 observer.observe(section);
             });
 
-            // 8. Logika Ambil Nama Tamu dari URL (Fitur Baru)
-            // Cara pakai link: linkwebsite.com/?to=Nama+Tamu
+            // ==========================================
+            // LOGIKA PINTAR: Membaca Nama Tamu dari URL
+            // Mendukung Format: 
+            // 1) ?to=Nama+Tamu
+            // 2) #to=Nama+Tamu
+            // 3) #Nama+Tamu (Format Paling Simpel & Ringkas)
+            // ==========================================
             const urlParams = new URLSearchParams(window.location.search);
-            const guestName = urlParams.get('to');
+            let guestName = urlParams.get('to');
+
+            // Jika tidak ada parameter query "?", coba cek di hash "#"
+            if (!guestName && window.location.hash) {
+                const hashValue = window.location.hash;
+                if (hashValue.includes('to=')) {
+                    // Mendukung format #to=Nama
+                    guestName = decodeURIComponent(hashValue.split('to=')[1].replace(/\+/g, ' '));
+                } else {
+                    // Mendukung format langsung #Nama (Sangat ramah pengguna)
+                    guestName = decodeURIComponent(hashValue.substring(1).replace(/\+/g, ' '));
+                }
+            }
+
             const guestDisplay = document.getElementById('guestNameDisplay');
             const formNameInput = document.getElementById('formName');
 
-            if (guestName) {
+            if (guestName && guestName.trim() !== "") {
                 // Tampilkan nama di sampul depan
                 guestDisplay.innerText = guestName;
                 // Isi otomatis kolom nama di form doa
@@ -518,7 +536,7 @@
                     formNameInput.value = guestName;
                 }
             } else {
-                // Jika tidak ada parameter URL, beri nama default
+                // Default jika tidak ada nama di link
                 guestDisplay.innerText = "Tamu Undangan";
             }
         });
